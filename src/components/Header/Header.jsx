@@ -12,7 +12,7 @@ const Header = () => {
           Smart Healthcare for a Healthier Tomorrow.
         </p>
 
-        <Link to="/explore" className="btn btn-primary btn-lg">
+        <Link to="/explore" className="btn btn-primary">
           Explore
         </Link>
       </div>
