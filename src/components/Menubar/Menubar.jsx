@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Menubar.css'
-import { assets } from '../assets/assets';
+import { assets } from '../../assets/assets';
 
 const Menubar = () => {
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
@@ -20,13 +21,13 @@ const Menubar = () => {
                 <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Home</a>
+                            <Link className="nav-link" to="/home">Home</Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Explore</a>
+                            <Link className="nav-link" to="/explore">Explore</Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Contact Us</a>
+                            <Link className="nav-link" to="/contact-us">Contact Us</Link>
                         </li>
 
                     </ul>
