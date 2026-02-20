@@ -19,15 +19,15 @@ export const assets = {
 
 export const categories = [
   {
-    category: 'Capsule',
+    category: 'Capsules',
     icon: capsule,
   },
   {
-    category: 'Tablet',
+    category: 'Tablets',
     icon: tablet,
   },
   {
-    category: 'Syrup',
+    category: 'Syrups',
     icon: syrup,
   },
   {
@@ -35,7 +35,7 @@ export const categories = [
     icon: injection,
   },
   {
-    category: 'Cream',
+    category: 'Creams',
     icon: cream,
   },
 ];

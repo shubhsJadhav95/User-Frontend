@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MedicineDisplay from '../../components/MedicineDisplay/MedicineDisplay';
 
 
 const Explore = () => {
+
+  const [category, setCategory] = useState('All');
+  const [searchText, setSearchtext] = useState('');
   return (
 
     <>
@@ -10,24 +13,29 @@ const Explore = () => {
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-md-6">
-            <form>
+            <form onSubmit={(e)=>e.preventDefault()}>
               <div className="input-group mb-3">
 
                 <select
                   className="form-select mt-2"
                   style={{ maxWidth: "150px" }}
+                  value={category}
+                  onChange={(e)=>setCategory(e.target.value)}
                 >
-                  <option value="Capsule">Capsule</option>
-                  <option value="Tablet">Tablet</option>
-                  <option value="Syrup">Syrup</option>
+                  <option value="All">All</option>
+                  <option value="Capsules">Capsules</option>
+                  <option value="Tablets">Tablets</option>
+                  <option value="Syrups">Syrups</option>
                   <option value="Injection">Injection</option>
-                  <option value="Cream">Cream</option>
+                  <option value="Creams">Creams</option>
                 </select>
 
                 <input
                   type="text"
                   className="form-control mt-2"
                   placeholder="Search your Medicine..."
+                  onChange={(e) => setSearchtext(e.target.value)}
+                  value={searchText}
                 />
 
                 <button
@@ -42,10 +50,12 @@ const Explore = () => {
           </div>
         </div>
       </div>
-      <MedicineDisplay />
+      <MedicineDisplay category={category}
+      searchText={searchText} />
     </>
 
   )
 }
 
 export default Explore;
+ 

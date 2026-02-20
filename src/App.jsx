@@ -6,6 +6,7 @@ import Home from './pages/Home/Home';
 import Explore from './pages/Explore/Explore';
 import ContactUs from './pages/Contact Us/ContactUs';
 import MedicineDetails from './pages/MedicineDetails/MedicineDetails';
+import Cart from './pages/Cart/Cart';
 
 const App = () => {
   return (
@@ -17,7 +18,8 @@ const App = () => {
           <Route path='/home' element={<Home/>} />
           <Route path='/explore' element={<Explore/>} />
           <Route path='/contact-us' element={<ContactUs/>} />
-          <Route path='/medicine/:id' element={<MedicineDetails/>} />
+          <Route path='/cart' element={<Cart/>} />
+
         </Routes>
       </div>
     </StoreContextProvider>

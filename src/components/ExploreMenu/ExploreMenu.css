@@ -1,44 +1,242 @@
-/* Hide scrollbar */
+/* ===== Hide Scrollbar ===== */
 .explore-menu-list::-webkit-scrollbar {
     display: none;
 }
-.explore-menu-list{
+.explore-menu-list {
     scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
-/* Image cursor pointer */
-.explore-menu-list-item img {
-    cursor: pointer;
+/* ===== Explore Menu Container ===== */
+.explore-menu {
+    padding: 32px 0;
+    background: linear-gradient(135deg, #f8fbfd 0%, #fff 100%);
+    border-radius: 12px;
 }
 
-/* Active category style */
-.explore-menu-list-item .active {
-    border: 5px solid blue;
-    padding: 2px;
+.explore-menu h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #1a1f36;
+    letter-spacing: -0.5px;
 }
 
+.explore-menu > p {
+    color: #6b7280;
+    margin-bottom: 28px;
+    font-size: 1rem;
+    line-height: 1.5;
+    max-width: 600px;
+}
+
+/* ===== Divider ===== */
 .explore-menu hr {
-    margin: 10px 0px;
-    height: 2px;
-    background-color: #e2e2;
+    margin: 24px 0;
+    height: 1px;
+    background: linear-gradient(90deg, #e5e7eb 0%, #e5e7eb 100%);
     border: none;
-
+    opacity: 0.6;
 }
 
-/* Category text style */
+/* ===== Menu List Container ===== */
+.explore-menu-list {
+    padding: 12px 0;
+    margin: 0;
+    scroll-behavior: smooth;
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    justify-content: space-around;
+    align-items: flex-start;
+    width: 100%;
+    flex-wrap: nowrap;
+}
+
+/* ===== Menu Items ===== */
+.explore-menu-list-item {
+    flex: 1 0 auto;
+    min-width: 120px;
+    max-width: 160px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+}
+
+.explore-menu-list-item:hover {
+    transform: translateY(-6px);
+}
+
+/* ===== Item Images ===== */
+.explore-menu-list-item img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12);
+    background: #fff;
+    border: 2px solid transparent;
+    margin-bottom: 10px;
+}
+
+.explore-menu-list-item img:hover {
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+    transform: scale(1.05);
+}
+
+.explore-menu-list-item img.active,
+.explore-menu-list-item.active img {
+    border: 3px solid #3b82f6;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.25);
+}
+
+/* ===== Category Text ===== */
 .explore-menu-list-item p {
-    color: #747474;
+    color: #374151;
+    font-size: 0.95rem;
+    font-weight: 500;
     cursor: pointer;
+    transition: color 0.2s ease;
+    margin: 0;
+    line-height: 1.4;
 }
 
-/* Scroll icons style */
-.scroll-icon {
-    font-size: 24px;
-    cursor: pointer;
-    margin-left: 10px;
-    color: #747474;
-    transition: color 0.2s;
+.explore-menu-list-item:hover p {
+    color: #3b82f6;
 }
-.scroll-icon:hover{
-    color: blue;
+
+.explore-menu-list-item.active p {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+/* ===== Scroll Navigation Icons ===== */
+.scroll-navigation {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.scroll-icon {
+    font-size: 22px;
+    cursor: pointer;
+    padding: 8px 10px;
+    color: #6b7280;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+}
+
+.scroll-icon:hover {
+    color: #3b82f6;
+    background: #dbeafe;
+    transform: scale(1.08);
+}
+
+.scroll-icon:active {
+    transform: scale(0.95);
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+    .explore-menu {
+        padding: 24px 0;
+    }
+
+    .explore-menu h1 {
+        font-size: 1.8rem;
+    }
+
+    .explore-menu > p {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+    }
+
+    .explore-menu-list-item {
+        min-width: 110px;
+        max-width: 140px;
+    }
+
+    .explore-menu-list-item img {
+        width: 95px;
+        height: 95px;
+    }
+
+    .explore-menu-list-item p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .explore-menu {
+        padding: 20px 0;
+    }
+
+    .explore-menu h1 {
+        font-size: 1.5rem;
+        margin-bottom: 6px;
+    }
+
+    .explore-menu > p {
+        font-size: 0.9rem;
+        margin-bottom: 18px;
+    }
+
+    .explore-menu-list {
+        gap: 8px;
+    }
+
+    .explore-menu-list-item {
+        min-width: 90px;
+        max-width: 110px;
+    }
+
+    .explore-menu-list-item img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 8px;
+    }
+
+    .explore-menu-list-item p {
+        font-size: 0.85rem;
+    }
+
+    .scroll-icon {
+        font-size: 20px;
+        min-width: 36px;
+        height: 36px;
+    }
+}
+
+/* ===== Accessibility & Animation ===== */
+@media (prefers-reduced-motion: reduce) {
+    .explore-menu-list-item,
+    .explore-menu-list-item img,
+    .scroll-icon {
+        transition: none;
+    }
+}
+
+/* ===== Smooth Focus States ===== */
+.explore-menu-list-item:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 4px;
+    border-radius: 8px;
+}
+
+.scroll-icon:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
 }
