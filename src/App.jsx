@@ -7,6 +7,9 @@ import Explore from './pages/Explore/Explore';
 import ContactUs from './pages/Contact Us/ContactUs';
 import MedicineDetails from './pages/MedicineDetails/MedicineDetails';
 import Cart from './pages/Cart/Cart';
+import PlaceOrders from "./pages/PlaceOrders/PlaceOrders";
+import Login from './components/Login/Login';
+import Register from './components/Register/Register';
 
 const App = () => {
   return (
@@ -16,10 +19,13 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home/>} />
           <Route path='/home' element={<Home/>} />
+          <Route path='/login' element={<Login/>} />
+          <Route path='/register' element={<Register/>} />
           <Route path='/explore' element={<Explore/>} />
           <Route path='/contact-us' element={<ContactUs/>} />
           <Route path='/cart' element={<Cart/>} />
-
+          <Route path='/order' element={<PlaceOrders/>} />
+          <Route path='/medicine/:id' element={<MedicineDetails/>} />
         </Routes>
       </div>
     </StoreContextProvider>
