@@ -1,14 +1,22 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Menubar.css'
 import { assets } from '../../assets/assets';
 import { StoreContext } from '../../context/StoreContext';
 
 const Menubar = () => {
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
-    const { medicineList, quantities } = useContext(StoreContext);
+    const { medicineList, quantities, token, setToken } = useContext(StoreContext);
     const uniqueItemsInCart = Object.values(quantities).filter(qty => qty > 0).length;
     const [active, setActive] = useState('home');
+    const navigate = useNavigate();
+
+    const logout = () => {
+        localStorage.removeItem("token");
+        setToken("");
+        navigate("/");
+    };
+
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container">
@@ -51,13 +59,28 @@ const Menubar = () => {
                                 </span>
                             </div>
                         </Link>
-                        <Link to="/login" className="btn btn-outline-primary me-2">
+                        {!token ? 
+                         <>
+                         <Link to="/login" className="btn btn-outline-primary me-2">
                             Login
-                        </Link>
+                         </Link>
 
                         <Link to="/register" className="btn btn-outline-success">
                             Register
-                        </Link>
+                         </Link>
+                         </>
+                        :
+                        <div className='dropdown text-end'>
+                            <a href="#" className="d-block link-body text-decoration-none dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src={assets.user} alt="User" className="rounded-circle" height="40" width="40" />
+                            </a>
+                            <ul className="dropdown-menu">
+                                <li><Link className="dropdown-item" to="/myorders">Orders</Link></li>
+                                <li><hr className="dropdown-divider" /></li>
+                                <li><Link className="dropdown-item" onClick={logout}>Logout</Link></li>
+                            </ul>
+                        </div>
+                       }
                     </div>
 
                 </div>

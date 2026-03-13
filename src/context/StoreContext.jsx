@@ -6,6 +6,7 @@ export const StoreContext = createContext(null);
 const StoreContextProvider = ({ children }) => {
   const [medicineList, setMedicineList] = useState([]);
   const [quantities, setQuantities] = useState({});
+  const [token,setToken] = useState();
 
   const increaseQty = (medicineId) => {
     setQuantities((prev) => ({
@@ -41,21 +42,28 @@ const StoreContextProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    const loadData = async () => {
-      const data = await fetchMedicineList();
-      setMedicineList(data);
-    };
+useEffect(() => {
+  const loadData = async () => {
+    const data = await fetchMedicineList();
+    setMedicineList(data);
 
-    loadData();
-  }, []);
+    const savedToken = localStorage.getItem("token");
+    if (savedToken) {
+      setToken(savedToken);
+    }
+  };
+
+  loadData();
+}, []);
 
   const contextValue = {
     medicineList,
     quantities,
     increaseQty,
     decreaseQty,
-    removeFromCart
+    removeFromCart,
+    token,
+    setToken
   };
 
   return (
