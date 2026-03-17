@@ -4,19 +4,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { calculateCartTotals } from "../../util/cartUtils";
 
 const Cart = () => {
-    const { medicineList, increaseQty, decreaseQty, quantities, removeFromCart} = useContext(StoreContext);
+    const { medicineList, increaseQty, decreaseQty, quantities, removeFromCart } = useContext(StoreContext);
     const navigate = useNavigate();
 
     // Cart items (only items with quantity > 0)
     const cartItems = medicineList.filter(
-        (medicine) => quantities[medicine.id] > 0
+        (medicine) => (quantities[medicine.id] || 0) > 0
     );
 
     // Calculations
-    const {subtotal,shipping,tax,total} = calculateCartTotals(
-       cartItems,
-       quantities
-      )
+    const { subtotal, shipping, tax, total } = calculateCartTotals(
+        cartItems,
+        quantities
+    );
 
     return (
         <div className="container py-5">
@@ -31,9 +31,10 @@ const Cart = () => {
                         <div className="card mb-4">
                             <div className="card-body">
 
-                                {cartItems.map((medicine) =>
-                                (
+                                {cartItems.map((medicine) => (
                                     <div key={medicine.id} className="row cart-item mb-3">
+                                        
+                                        {/* Image */}
                                         <div className="col-md-3">
                                             <img
                                                 src={medicine.imageUrl}
@@ -43,11 +44,15 @@ const Cart = () => {
                                             />
                                         </div>
 
+                                        {/* Info */}
                                         <div className="col-md-5">
                                             <h5 className="card-title">{medicine.name}</h5>
-                                            <p className="text-muted">Category : {medicine.category}</p>
+                                            <p className="text-muted">
+                                                Category : {medicine.category}
+                                            </p>
                                         </div>
 
+                                        {/* Quantity Controls */}
                                         <div className="col-md-2">
                                             <div className="input-group">
                                                 <button
@@ -60,7 +65,8 @@ const Cart = () => {
                                                 <input
                                                     type="text"
                                                     className="form-control form-control-sm text-center quantity-input"
-                                                    value={quantities[medicine.id]}
+                                                    value={quantities[medicine.id] || 0}
+                                                    readOnly
                                                     style={{ maxWidth: "100px" }}
                                                 />
 
@@ -73,24 +79,30 @@ const Cart = () => {
                                             </div>
                                         </div>
 
+                                        {/* Price & Remove */}
                                         <div className="col-md-2 text-end">
-                                            <p className="fw-bold">&#8377;{medicine.price * quantities[medicine.id].toFixed(2)}</p>
-                                            <button className="btn btn-sm btn-outline-danger" onClick={()=>removeFromCart(medicine.id)}>
+                                            <p className="fw-bold">
+                                                &#8377;
+                                                {(medicine.price * (quantities[medicine.id] || 0)).toFixed(2)}
+                                            </p>
+
+                                            <button
+                                                className="btn btn-sm btn-outline-danger"
+                                                onClick={() => removeFromCart(medicine.id)}
+                                            >
                                                 <i className="bi bi-trash"></i>
                                             </button>
                                         </div>
-                                         <hr />
+
+                                        <hr />
                                     </div>
-                                ))
-                                }
-
-                               
-
+                                ))}
 
                             </div>
                         </div>
                     )}
 
+                    {/* Continue Shopping */}
                     <div className="text-start mb-4">
                         <Link to="/" className="btn btn-outline-primary">
                             <i className="bi bi-arrow-left me-2"></i>
@@ -112,7 +124,9 @@ const Cart = () => {
 
                             <div className="d-flex justify-content-between mb-3">
                                 <span>Shipping</span>
-                                <span>&#8377;{subtotal===0 ? 0.0 :shipping.toFixed(2)}</span>
+                                <span>
+                                    &#8377;{subtotal === 0 ? "0.00" : shipping.toFixed(2)}
+                                </span>
                             </div>
 
                             <div className="d-flex justify-content-between mb-3">
@@ -124,18 +138,22 @@ const Cart = () => {
 
                             <div className="d-flex justify-content-between mb-4">
                                 <strong>Total</strong>
-                                <strong>&#8377;{subtotal===0 ? 0.0 :total.toFixed(2)}</strong>
+                                <strong>
+                                    &#8377;{subtotal === 0 ? "0.00" : total.toFixed(2)}
+                                </strong>
                             </div>
 
-                            <button className="btn btn-primary w-100" disabled = {cartItems.length === 0}
-                             onClick={()=>navigate('/order')}>
+                            <button
+                                className="btn btn-primary w-100"
+                                disabled={cartItems.length === 0}
+                                onClick={() => navigate('/order')}
+                            >
                                 Proceed to Checkout
                             </button>
                         </div>
                     </div>
-
-
                 </div>
+
             </div>
         </div>
     );

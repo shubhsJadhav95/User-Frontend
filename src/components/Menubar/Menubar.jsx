@@ -6,7 +6,7 @@ import { StoreContext } from '../../context/StoreContext';
 
 const Menubar = () => {
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
-    const { medicineList, quantities, token, setToken } = useContext(StoreContext);
+    const { medicineList, quantities, token, setToken,setQuantities } = useContext(StoreContext);
     const uniqueItemsInCart = Object.values(quantities).filter(qty => qty > 0).length;
     const [active, setActive] = useState('home');
     const navigate = useNavigate();
@@ -14,6 +14,7 @@ const Menubar = () => {
     const logout = () => {
         localStorage.removeItem("token");
         setToken("");
+        setQuantities({});
         navigate("/");
     };
 

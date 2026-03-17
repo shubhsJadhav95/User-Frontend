@@ -8,7 +8,7 @@ import { StoreContext } from "../../context/StoreContext";
 const Login = () => {
 
   const navigate = useNavigate();
-  const { setToken } = useContext(StoreContext);
+  const { setToken, loadCartData } = useContext(StoreContext);
 
   const [data, setData] = useState({
     email: "",
@@ -33,6 +33,9 @@ const Login = () => {
       if (loginData.token) {
         setToken(loginData.token);
         localStorage.setItem("token", loginData.token);
+
+        // Load user's cart data after login
+        await loadCartData(loginData.token);
 
         toast.success("Login successful");
 
