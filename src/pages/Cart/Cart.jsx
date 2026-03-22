@@ -1,11 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import { Link, useNavigate } from "react-router-dom";
 import { calculateCartTotals } from "../../util/cartUtils";
+import "./Cart.css";
 
 const Cart = () => {
     const { medicineList, increaseQty, decreaseQty, quantities, removeFromCart } = useContext(StoreContext);
     const navigate = useNavigate();
+    const [removingId, setRemovingId] = useState(null);
 
     // Cart items (only items with quantity > 0)
     const cartItems = medicineList.filter(
@@ -18,142 +20,176 @@ const Cart = () => {
         quantities
     );
 
+    // Handle remove with animation
+    const handleRemove = (medicineId) => {
+        setRemovingId(medicineId);
+        setTimeout(() => {
+            removeFromCart(medicineId);
+            setRemovingId(null);
+        }, 300);
+    };
+
     return (
-        <div className="container py-5">
-            <h1 className="mb-5">Your Shopping Cart</h1>
+        <div className="cart-wrapper">
+            <div className="cart-container">
+                {/* Header */}
+                <div className="cart-header">
+                    <div>
+                        <h1 className="cart-title">Shopping Cart</h1>
+                        <p className="cart-subtitle">
+                            {cartItems.length === 0 
+                                ? "Your cart is empty" 
+                                : `${cartItems.length} item${cartItems.length !== 1 ? 's' : ''} in cart`}
+                        </p>
+                    </div>
+                </div>
 
-            <div className="row">
-                <div className="col-lg-8">
-
-                    {cartItems.length === 0 ? (
-                        <p>Your cart is empty</p>
-                    ) : (
-                        <div className="card mb-4">
-                            <div className="card-body">
-
-                                {cartItems.map((medicine) => (
-                                    <div key={medicine.id} className="row cart-item mb-3">
-                                        
-                                        {/* Image */}
-                                        <div className="col-md-3">
+                <div className="cart-content">
+                    {/* Cart Items Section */}
+                    <div className="cart-items-section">
+                        {cartItems.length === 0 ? (
+                            <div className="empty-cart">
+                                <div className="empty-icon">🛍️</div>
+                                <h3 className="empty-title">Your cart is empty</h3>
+                                <p className="empty-text">Add some medicines to get started!</p>
+                                <Link to="/" className="btn btn-primary-solid">
+                                    Start Shopping
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="items-list">
+                                {cartItems.map((medicine, index) => (
+                                    <div 
+                                        key={medicine.id} 
+                                        className={`cart-item ${removingId === medicine.id ? 'removing' : ''}`}
+                                        style={{ animationDelay: `${index * 0.05}s` }}
+                                    >
+                                        {/* Product Image */}
+                                        <div className="item-image">
                                             <img
                                                 src={medicine.imageUrl}
                                                 alt={medicine.name}
-                                                className="img-fluid rounded"
-                                                width={100}
+                                                className="product-img"
                                             />
+                                            <div className="image-badge">{medicine.category}</div>
                                         </div>
 
-                                        {/* Info */}
-                                        <div className="col-md-5">
-                                            <h5 className="card-title">{medicine.name}</h5>
-                                            <p className="text-muted">
-                                                Category : {medicine.category}
+                                        {/* Product Info */}
+                                        <div className="item-info">
+                                            <h4 className="product-name">{medicine.name}</h4>
+                                            <p className="product-category">Category: {medicine.category}</p>
+                                            <p className="product-price">
+                                                ₹{medicine.price.toFixed(2)} <span className="price-unit">per unit</span>
                                             </p>
                                         </div>
 
                                         {/* Quantity Controls */}
-                                        <div className="col-md-2">
-                                            <div className="input-group">
-                                                <button
-                                                    className="btn btn-outline-secondary btn-sm"
-                                                    onClick={() => decreaseQty(medicine.id)}
-                                                >
-                                                    -
-                                                </button>
-
-                                                <input
-                                                    type="text"
-                                                    className="form-control form-control-sm text-center quantity-input"
-                                                    value={quantities[medicine.id] || 0}
-                                                    readOnly
-                                                    style={{ maxWidth: "100px" }}
-                                                />
-
-                                                <button
-                                                    className="btn btn-outline-secondary btn-sm"
-                                                    onClick={() => increaseQty(medicine.id)}
-                                                >
-                                                    +
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        {/* Price & Remove */}
-                                        <div className="col-md-2 text-end">
-                                            <p className="fw-bold">
-                                                &#8377;
-                                                {(medicine.price * (quantities[medicine.id] || 0)).toFixed(2)}
-                                            </p>
-
+                                        <div className="item-quantity">
                                             <button
-                                                className="btn btn-sm btn-outline-danger"
-                                                onClick={() => removeFromCart(medicine.id)}
+                                                className="qty-btn qty-minus"
+                                                onClick={() => decreaseQty(medicine.id)}
+                                                title="Decrease quantity"
                                             >
-                                                <i className="bi bi-trash"></i>
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" strokeWidth="2"/>
+                                                </svg>
+                                            </button>
+                                            <input
+                                                type="text"
+                                                className="qty-input"
+                                                value={quantities[medicine.id] || 0}
+                                                readOnly
+                                            />
+                                            <button
+                                                className="qty-btn qty-plus"
+                                                onClick={() => increaseQty(medicine.id)}
+                                                title="Increase quantity"
+                                            >
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <line x1="8" y1="2" x2="8" y2="14" stroke="currentColor" strokeWidth="2"/>
+                                                    <line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" strokeWidth="2"/>
+                                                </svg>
                                             </button>
                                         </div>
 
-                                        <hr />
+                                        {/* Item Total */}
+                                        <div className="item-total">
+                                            <p className="total-amount">
+                                                ₹{(medicine.price * (quantities[medicine.id] || 0)).toFixed(2)}
+                                            </p>
+                                        </div>
+
+                                        {/* Remove Button */}
+                                        <button
+                                            className="btn-remove"
+                                            onClick={() => handleRemove(medicine.id)}
+                                            title="Remove from cart"
+                                        >
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                            </svg>
+                                        </button>
                                     </div>
                                 ))}
-
                             </div>
-                        </div>
-                    )}
-
-                    {/* Continue Shopping */}
-                    <div className="text-start mb-4">
-                        <Link to="/" className="btn btn-outline-primary">
-                            <i className="bi bi-arrow-left me-2"></i>
-                            Continue Shopping
-                        </Link>
+                        )}
                     </div>
-                </div>
 
-                {/* Order Summary */}
-                <div className="col-lg-4">
-                    <div className="card cart-summary">
-                        <div className="card-body">
-                            <h5 className="card-title mb-4">Order Summary</h5>
+                    {/* Order Summary Sidebar */}
+                    <div className="cart-summary-section">
+                        <div className="summary-card">
+                            <h3 className="summary-title">Order Summary</h3>
 
-                            <div className="d-flex justify-content-between mb-3">
-                                <span>Subtotal</span>
-                                <span>&#8377;{subtotal.toFixed(2)}</span>
+                            {/* Summary Items */}
+                            <div className="summary-items">
+                                <div className="summary-row">
+                                    <span className="summary-label">Subtotal</span>
+                                    <span className="summary-value">₹{subtotal.toFixed(2)}</span>
+                                </div>
+
+                                <div className="summary-row">
+                                    <span className="summary-label">Shipping</span>
+                                    <span className="summary-value shipping-value">
+                                        {subtotal === 0 ? "FREE" : `₹${shipping.toFixed(2)}`}
+                                    </span>
+                                </div>
+
+                                <div className="summary-row">
+                                    <span className="summary-label">Tax</span>
+                                    <span className="summary-value tax-value">₹{tax.toFixed(2)}</span>
+                                </div>
+
+                                <div className="summary-divider"></div>
+
+                                <div className="summary-row total-row">
+                                    <span className="summary-label total-label">Total Amount</span>
+                                    <span className="summary-value total-value">
+                                        ₹{subtotal === 0 ? "0.00" : total.toFixed(2)}
+                                    </span>
+                                </div>
                             </div>
 
-                            <div className="d-flex justify-content-between mb-3">
-                                <span>Shipping</span>
-                                <span>
-                                    &#8377;{subtotal === 0 ? "0.00" : shipping.toFixed(2)}
-                                </span>
-                            </div>
-
-                            <div className="d-flex justify-content-between mb-3">
-                                <span>Tax</span>
-                                <span>&#8377;{tax.toFixed(2)}</span>
-                            </div>
-
-                            <hr />
-
-                            <div className="d-flex justify-content-between mb-4">
-                                <strong>Total</strong>
-                                <strong>
-                                    &#8377;{subtotal === 0 ? "0.00" : total.toFixed(2)}
-                                </strong>
-                            </div>
-
+                          
+                            {/* Checkout Button */}
                             <button
-                                className="btn btn-primary w-100"
+                                className={`btn btn-checkout ${cartItems.length === 0 ? 'disabled' : ''}`}
                                 disabled={cartItems.length === 0}
                                 onClick={() => navigate('/order')}
                             >
-                                Proceed to Checkout
+                                <span>Proceed to Checkout</span>
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                    <path d="M3 9H15M15 9L9 3M15 9L9 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
                             </button>
-                        </div>
+
+                            {/* Continue Shopping */}
+                            <Link to="/" className="btn btn-secondary">
+                                ← Continue Shopping
+                            </Link>
+
+                                                    </div>
                     </div>
                 </div>
-
             </div>
         </div>
     );

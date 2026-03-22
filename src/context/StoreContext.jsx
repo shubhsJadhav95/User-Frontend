@@ -24,13 +24,25 @@ const StoreContextProvider = ({ children }) => {
   // Load cart data
   const loadCartData = async (userToken) => {
     try {
+      if (!userToken) {
+        console.log("No token available for cart loading");
+        return;
+      }
+      
       const response = await axios.get(`${API_BASE}/cart`, {
         headers: { Authorization: `Bearer ${userToken}` }
       });
 
       setQuantities(response.data.items || {});
     } catch (error) {
-      console.error("Error loading cart:", error);
+      if (error.response?.status === 403) {
+        console.warn("Authentication failed - token may be expired");
+        // Clear invalid token
+        localStorage.removeItem("token");
+        setToken(null);
+      } else {
+        console.error("Error loading cart:", error);
+      }
     }
   };
 
@@ -51,7 +63,13 @@ const StoreContextProvider = ({ children }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
     } catch (error) {
-      console.error("Error adding to cart:", error);
+      if (error.response?.status === 403) {
+        console.warn("Authentication failed - token may be expired");
+        localStorage.removeItem("token");
+        setToken(null);
+      } else {
+        console.error("Error adding to cart:", error);
+      }
     }
   };
 
@@ -79,7 +97,13 @@ const StoreContextProvider = ({ children }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
     } catch (error) {
-      console.error("Error removing item from cart:", error);
+      if (error.response?.status === 403) {
+        console.warn("Authentication failed - token may be expired");
+        localStorage.removeItem("token");
+        setToken(null);
+      } else {
+        console.error("Error removing item from cart:", error);
+      }
     }
   };
 
@@ -120,7 +144,7 @@ const StoreContextProvider = ({ children }) => {
     token,
     setToken,
     setQuantities,
-    loadCartData,
+    loadCartData
    
   };
 

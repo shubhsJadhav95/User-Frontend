@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Token Debug</title>
+</head>
+<body>
+    <h1>Token Debug Info</h1>
+    <div id="token-info"></div>
+    <button onclick="clearToken()">Clear Token</button>
+    <button onclick="goToLogin()">Go to Login</button>
+    
+    <script>
+        const token = localStorage.getItem("token");
+        const info = document.getElementById("token-info");
+        
+        if (token) {
+            info.innerHTML = `
+                <p><strong>Token found:</strong> ${token.substring(0, 20)}...</p>
+                <p><strong>Token length:</strong> ${token.length}</p>
+                <p><strong>Token appears valid:</strong> ${token.length > 10 ? 'Yes' : 'No'}</p>
+            `;
+        } else {
+            info.innerHTML = "<p><strong>No token found in localStorage</strong></p>";
+        }
+        
+        function clearToken() {
+            localStorage.removeItem("token");
+            location.reload();
+        }
+        
+        function goToLogin() {
+            window.location.href = "http://localhost:5175/login";
+        }
+    </script>
+</body>
+</html>

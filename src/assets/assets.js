@@ -8,6 +8,7 @@ import tablet from './tablet.jpg';
 import injection from './injection.jpg';
 import capsule from './capsule.jpg';
 import user from './user.png'
+import Delivery from './delivery.jpg'
 
 
 
@@ -16,7 +17,8 @@ export const assets = {
   upload,
   cart,
   NeoCare,
-  user
+  user,
+  Delivery
 };
 
 export const categories = [
